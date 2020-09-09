@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Orchid List</h1>
+
+{% for orchid in orchids%}
+<div class="card">
+    <a href="{% url 'detail' orchid.id %}">
+        <div class="card-content">
+            <span class="card-title">{{ orchid.name }}</span>
+            <p>Genus: {{ orchid.genus }}</p>
+            <p>Description: {{ orchid.description }}</p>
+
+            {% if orchid.age > 0 %}
+            <p>Age: {{ orchid.age }}</p>
+            {% else %}
+            <p>Age: Seedling</p>
+            {% endif %}
+        </div>
+    </a>
+</div>
+
+{% endfor %}
+
+{% endblock %}
