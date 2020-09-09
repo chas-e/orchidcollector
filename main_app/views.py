@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import Orchid
 
@@ -16,3 +17,7 @@ def orchids_index(request):
 def orchids_detail(request, orchid_id):
     orchid = Orchid.objects.get(id=orchid_id)
     return render(request, 'orchids/detail.html', { 'orchid': orchid })
+
+class OrchidCreate(CreateView):
+    model = Orchid
+    fields = '__all__'
