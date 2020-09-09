@@ -4,6 +4,7 @@
 <h1>Orchid Details</h1>
 
 <div class="card">
+
     <div class="card-content">
         <span class="card-title">{{ orchid.name }}</span>
         <p>Genus: {{ orchid.genus }}</p>
@@ -14,6 +15,13 @@
         {% else %}
         <p>Age: Seedling</p>
         {% endif %}
+    </div>
+
+    <div class="card-action">
+        <a href="{% url 'orchids_update' orchid.id %}" class="green btn">Edit Orchid</a>
+
+        <a href="{% url 'orchids_delete' orchid.id %}" class="deep-orange accent-4 btn">Delete Orchid</a>
+
     </div>
 </div>
 

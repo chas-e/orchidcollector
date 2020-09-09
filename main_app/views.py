@@ -21,3 +21,11 @@ def orchids_detail(request, orchid_id):
 class OrchidCreate(CreateView):
     model = Orchid
     fields = '__all__'
+
+class OrchidUpdate(UpdateView):
+    model = Orchid
+    fields = '__all__'
+
+class OrchidDelete(DeleteView):
+    model = Orchid
+    success_url = '/orchids/'
