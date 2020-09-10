@@ -14,7 +14,7 @@ class Supply(models.Model):
         return reverse("supplies_detail", kwargs={ "supply_id": self.id })
     
     
-    class Orchid(models.Model):
+class Orchid(models.Model):
     name = models.CharField(max_length = 100)
     genus = models.CharField(max_length = 100)
     description = models.TextField(max_length = 250)
