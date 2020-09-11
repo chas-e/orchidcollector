@@ -8,7 +8,7 @@
 
 {% else %}
 
-<h1>Add an Orchid</h1>
+<h1>Add a Supply</h1>
 {% endif %}
 
 <form action="" method="POST">
@@ -17,7 +17,7 @@
         {{ form.as_table }}
     </table>
     <input type="submit" value="Submit" class="btn green">
-    <a href="{% url 'index' %}" class="deep-orange accent-4 btn">Cancel</a>
+    <a href="{% url 'supplies_index' %}" class="deep-orange accent-4 btn">Cancel</a>
 </form>
 
 

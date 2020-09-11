@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Supply Details</h1>
+
+<div class="card">
+    <div class="card-content">
+        <span class="card-title">{{ object.name }}</span>
+        <p>Description: {{ object.description }}</p>
+    </div>
+
+    <div class="card-action">
+        <a href="{% url 'supplies_update' object.id %}" class="green btn">Edit Supply</a>
+
+        <a href="{% url 'supplies_delete' object.id %}" class="deep-orange accent-4 btn">Delete Supply</a>
+    </div>
+</div>
+
+{% endblock %}
