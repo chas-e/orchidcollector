@@ -18,4 +18,6 @@ urlpatterns = [
     path('supplies/<int:pk>/delete/',views.SupplyDelete.as_view(), name='supplies_delete'),
     path('supplies/<int:pk>/',views.SupplyDetail.as_view(), name='supply_detail'),
     path('supplies/', views.SupplyList.as_view(), name='supplies_index'),
+    path('accounts/signup/', views.signup, name='signup'),
+
 ]

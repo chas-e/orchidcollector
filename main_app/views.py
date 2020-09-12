@@ -2,8 +2,16 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .models import Orchid, Supply
 from .forms import WateringForm
+
+S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
+BUCKET = 'catcollector618bucket'
 
 
 # Create your views here.
@@ -13,10 +21,26 @@ def home(request):
 def about(request):
     return render(request, 'about.html')
 
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('index')
+        else:
+            error_message = 'Invalid sign up, please try again.'
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
+
+@login_required
 def orchids_index(request):
-    orchids = Orchid.objects.all()
+    orchids = Orchid.objects.filter(user=request.user)
     return render(request, 'orchids/index.html', { 'orchids': orchids })
 
+@login_required
 def orchids_detail(request, orchid_id):
     orchid = Orchid.objects.get(id=orchid_id)
     # Get supplies the orchid doesn't have
@@ -25,6 +49,7 @@ def orchids_detail(request, orchid_id):
     watering_form = WateringForm()
     return render(request, 'orchids/detail.html', { 'orchid': orchid, 'watering_form': watering_form, 'supplies': supplies_orchid_doesnt_have })
 
+@login_required
 def add_watering(request, orchid_id):
     form = WateringForm(request.POST)
 
@@ -35,40 +60,47 @@ def add_watering(request, orchid_id):
 
     return redirect('detail', orchid_id=orchid_id)
 
+@login_required
 def assoc_supply(request, orchid_id, supply_id):
     Orchid.objects.get(id=orchid_id).supplies.add(supply_id)
     return redirect('detail', orchid_id=orchid_id)
 
+@login_required
 def disassoc_supply(request, orchid_id, supply_id):
     Orchid.objects.get(id=orchid_id).supplies.remove(supply_id)
     return redirect('detail', orchid_id=orchid_id)
 
-class OrchidCreate(CreateView):
+class OrchidCreate(LoginRequiredMixin, CreateView):
     model = Orchid
     fields = ['name', 'genus', 'description', 'age']
 
-class OrchidUpdate(UpdateView):
+    # assign user to form when creating a new cat
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class OrchidUpdate(LoginRequiredMixin, UpdateView):
     model = Orchid
     fields = '__all__'
 
-class OrchidDelete(DeleteView):
+class OrchidDelete(LoginRequiredMixin, DeleteView):
     model = Orchid
     success_url = '/orchids/'
 
-class SupplyCreate(CreateView):
+class SupplyCreate(LoginRequiredMixin, CreateView):
     model = Supply
     fields = ['name', 'description']
 
-class SupplyUpdate(UpdateView):
+class SupplyUpdate(LoginRequiredMixin, UpdateView):
     model = Supply
     fields = ['name', 'description']
 
-class SupplyDelete(DeleteView):
+class SupplyDelete(LoginRequiredMixin, DeleteView):
     model = Supply
     success_url = '/supplies/'
 
-class SupplyDetail(DetailView):
+class SupplyDetail(LoginRequiredMixin, DetailView):
     model = Supply
 
-class SupplyList(ListView):
+class SupplyList(LoginRequiredMixin, ListView):
     model = Supply
