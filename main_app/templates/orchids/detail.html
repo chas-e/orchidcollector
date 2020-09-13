@@ -19,10 +19,20 @@
             </div>
             <div class="card-action">
                 <a href="{% url 'orchids_update' orchid.id %}" class="green btn">Edit Orchid</a>
-
                 <a href="{% url 'orchids_delete' orchid.id %}" class="deep-orange accent-4 btn">Delete Orchid</a>
             </div>
         </div>
+        {% for photo in orchid.photo_set.all %}
+        <img src="{{ photo.url }}" class="responsive-img card-panel">
+        {% empty %}
+        <div class="card-panel deep-orange-text accent-4 center-align">No Photos Uploaded So Far</div>
+        {% endfor %}
+        <form action="{% url 'add_photo' orchid.id %}" enctype="multipart/form-data" method="POST" class="card-panel">
+            {% csrf_token %}
+            <input type="file" name='photo-file'>
+            <br><br>
+            <input type="submit" class="btn green" value="Upload Photo">
+        </form>
     </div>
     <div class="col s6">
         <div class="card" style="padding: 2vmin;">

@@ -51,3 +51,10 @@ class Watering(models.Model):
 
     def __str__(self):
         return f'{self.get_fertilizer_display()} on {self.date}'
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    orchid = models.ForeignKey(Orchid, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Photo for orchid_id: {self.orchid_id} @{self.url}'
