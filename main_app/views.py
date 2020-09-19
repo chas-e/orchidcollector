@@ -9,12 +9,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 import uuid
 import boto3
+from decouple import config
 
 from .models import Orchid, Supply, Photo
 from .forms import WateringForm
 
-S3_BASE_URL = 'https://s3-us-west-1.amazonaws.com/'
-BUCKET = 'catcollector618bucket'
+S3_BASE_URL = config('S3_BASE_URL')
+BUCKET = config('BUCKET')
 
 
 # Create your views here.
@@ -93,7 +94,7 @@ class OrchidCreate(LoginRequiredMixin, CreateView):
     model = Orchid
     fields = ['name', 'genus', 'description', 'age']
 
-    # assign user to form when creating a new cat
+    # assign user to form when creating a new orchid
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
